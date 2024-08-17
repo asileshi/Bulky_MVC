@@ -17,4 +17,9 @@ public class CategoryController : Controller
         List<Categorty> objCategoryList = _db.Categorties.ToList();
         return View(objCategoryList);
     }
+
+    public IActionResult Create() 
+    {
+        return View();
+    }
 }
