@@ -7,10 +7,12 @@ namespace BulkyWeb.Controllers;
 public class CategoryController : Controller
 {
     private readonly ApplicationDbContext _db;
+
     public CategoryController(ApplicationDbContext db)
     {
         _db = db;
     }
+
     // GET
     public IActionResult Index()
     {
@@ -18,10 +20,11 @@ public class CategoryController : Controller
         return View(objCategoryList);
     }
 
-    public IActionResult Create() 
+    public IActionResult Create()
     {
         return View();
     }
+
     [HttpPost]
     public IActionResult Create(Categorty obj)
     {
@@ -34,4 +37,39 @@ public class CategoryController : Controller
 
         return View();
     }
+
+    public IActionResult Edit(int? id)
+    {
+        if (id == null || id == 0)
+        {
+            return NotFound();
+        }
+
+        Categorty? categoryFromDb = _db.Categorties.Find(id);
+        //Categorty categoryFromDb = _db.Categorties.Where(u => u.Id == id);
+        //Categorty? categoryFromDb = _db.Categorties.FirstOrDefault(u => u.Id == id);
+        if (categoryFromDb == null)
+        {
+            return NotFound();
+
+        }
+
+        return View(categoryFromDb);
+
+    }
+
+    [HttpPost]
+    public IActionResult Edit(Categorty obj)
+    {
+        if (ModelState.IsValid)
+        {
+            _db.Categorties.Update(obj);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        return View();
+    }
 }
+
+
