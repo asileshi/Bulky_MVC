@@ -70,6 +70,30 @@ public class CategoryController : Controller
 
         return View();
     }
+
+    public IActionResult Delete(int? id)
+    {
+        if (id == null || id == 0)
+        {
+            return NotFound();
+        }
+
+        Categorty? categoryFromDb = _db.Categorties.FirstOrDefault(u => u.Id == id);
+        return View(categoryFromDb);
+    }
+    [HttpPost,ActionName("Delete")]
+    public IActionResult DeleteCategory(int? id)
+    {
+        Categorty? obj = _db.Categorties.FirstOrDefault(u => u.Id == id);
+        if (obj == null)
+        {
+            return NotFound();
+        }
+
+        _db.Categorties.Remove(obj);
+        _db.SaveChanges();
+        return RedirectToAction("Index");
+    }
 }
 
 
